@@ -13,17 +13,17 @@ from keras.models import load_model
 from keras.layers import Input
 from PIL import Image, ImageFont, ImageDraw
 
-from algorithm.yolo.yolo3.model import yolo_eval, yolo_body, tiny_yolo_body
-from algorithm.yolo.yolo3.utils import letterbox_image
+from yolo3.model import yolo_eval, yolo_body, tiny_yolo_body
+from yolo3.utils import letterbox_image
 import os
 from keras.utils import multi_gpu_model
 
 
 class YOLO(object):
     _defaults = {
-        "model_path": "./algorithm/yolo/logs/trained_weights_250.h5",
-        "anchors_path": "./algorithm/yolo/model_data/yolo_anchors.txt",
-        "classes_path": "./algorithm/yolo/model_data/coco_classes.txt",
+        "model_path": "./yolo/logs/trained_weights_250.h5",
+        "anchors_path": "./yolo/model_data/yolo_anchors.txt",
+        "classes_path": "./yolo/model_data/coco_classes.txt",
         "score": 0.3,
         "iou": 0.45,
         "model_image_size": (416, 416),
@@ -61,7 +61,8 @@ class YOLO(object):
 
     def generate(self):
         model_path = os.path.expanduser(self.model_path)
-        assert model_path.endswith(".h5"), "Keras model or weights must be a .h5 file."
+        assert model_path.endswith(
+            ".h5"), "Keras model or weights must be a .h5 file."
 
         # Load model, or construct model and load weights.
         num_anchors = len(self.anchors)
@@ -111,7 +112,8 @@ class YOLO(object):
         # Generate output tensor targets for filtered bounding boxes.
         self.input_image_shape = K.placeholder(shape=(2,))
         if self.gpu_num >= 2:
-            self.yolo_model = multi_gpu_model(self.yolo_model, gpus=self.gpu_num)
+            self.yolo_model = multi_gpu_model(
+                self.yolo_model, gpus=self.gpu_num)
         boxes, scores, classes = yolo_eval(
             self.yolo_model.output,
             self.anchors,
@@ -128,7 +130,8 @@ class YOLO(object):
         if self.model_image_size != (None, None):
             assert self.model_image_size[0] % 32 == 0, "Multiples of 32 required"
             assert self.model_image_size[1] % 32 == 0, "Multiples of 32 required"
-            boxed_image = letterbox_image(image, tuple(reversed(self.model_image_size)))
+            boxed_image = letterbox_image(
+                image, tuple(reversed(self.model_image_size)))
         else:
             new_image_size = (
                 image.width - (image.width % 32),
@@ -153,7 +156,7 @@ class YOLO(object):
         print("Found {} boxes for {}".format(len(out_boxes), "img"))
 
         font = ImageFont.truetype(
-            font="./algorithm/yolo/font/FiraMono-Medium.otf",
+            font="./yolo/font/FiraMono-Medium.otf",
             size=np.floor(3e-2 * image.size[1] + 0.5).astype("int32"),
         )
         thickness = (image.size[0] + image.size[1]) // 300
@@ -174,7 +177,8 @@ class YOLO(object):
             right = min(image.size[0], np.floor(right + 0.5).astype("int32"))
             print(label, (left, top), (right, bottom))
             f.write(
-                str(left) + " " + str(top) + " " + str(right) + " " + str(bottom) + " "
+                str(left) + " " + str(top) + " " +
+                str(right) + " " + str(bottom) + " "
             )
             if top - label_size[1] >= 0:
                 text_origin = np.array([left, top - label_size[1]])

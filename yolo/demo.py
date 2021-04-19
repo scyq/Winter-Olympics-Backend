@@ -1,7 +1,8 @@
 import sys
-from algorithm.yolo.yolo import YOLO
+from yolo import YOLO
 from PIL import Image
-import os, cv2
+import os
+import cv2
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
@@ -27,5 +28,5 @@ def detect_curling(video_path, txt_path):
 
 if __name__ == "__main__":
     detect_curling(
-        "./algorithm/yolo/data/1.mp4", "./algorithm/yolo/data/coordinates.txt"
+        "./yolo/data/1.mp4", "./yolo/data/coordinates.txt"
     )

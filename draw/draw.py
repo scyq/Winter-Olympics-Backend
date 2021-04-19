@@ -3,13 +3,13 @@ import numpy as np
 
 
 def draw():
-    file = open("./algorithm/yolo/data/coordinates.txt")
+    file = open("./yolo/data/coordinates.txt")
     mutilcurling = []
     for line in file.readlines():
         curLine = line.strip().split(" ")
         mutilcurling.append(curLine[0:100])
     a = []
-    frame_img = cv2.imread("./algorithm/draw/playground.jpg", 1)
+    frame_img = cv2.imread("./draw/playground.jpg", 1)
     # 中心点
     # x = 240.75
     # y = 221
@@ -26,7 +26,7 @@ def draw():
             xmid = (xmin + xmax) / 2
             ymid = (ymin + ymax) / 2
             cv2.circle(frame_img, (int(xmid), int(ymid)), 10, (0, 0, 255), -1)
-    cv2.imwrite("./src/assets/frame.jpg", frame_img)
+    cv2.imwrite("./output/frame.jpg", frame_img)
 
 
 if __name__ == "__main__":
