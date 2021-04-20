@@ -1,1 +1,6 @@
-#Winter-Olympics-Backend
+# Winter-Olympics-Backend
+
+dependencies:
+	fastapi
+	uvicorn
+	aiofiles
