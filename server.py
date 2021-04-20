@@ -26,6 +26,10 @@ async def start():
 
 @app.get("/vr")
 def vr():
-    os.system('''conda.bat activate "C:\Anaconda3"&\
-                              python C:/Users/887/Desktop/temp/test3.py --url wss://kirnu-ws2.stereye.tech --password kirnu&''')
-    return JSONResponse(False, headers=headers)
+    try:
+        os.system('''conda.bat activate "C:\Anaconda3"&\
+                                  python C:/Users/887/Desktop/temp/test3.py --url wss://kirnu-ws2.stereye.tech --password kirnu&''')
+    except Exception:
+        print(Exception)
+        return JSONResponse(False, headers=headers)
+    return JSONResponse(True, headers=headers)
